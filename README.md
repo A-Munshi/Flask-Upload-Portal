@@ -53,8 +53,8 @@ flask-file-uploader/
 ### Installation & Setup
 Clone the repository:
 ```
-git clone https://github.com/<your-username>/flask-advanced-uploader.git
-cd flask-advanced-uploader
+git clone https://github.com/A-Munshi/Flask-Upload-Portal.git
+cd Flask-Upload-Portal
 ```
 
 Install dependencies:
