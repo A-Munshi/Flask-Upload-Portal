@@ -4,8 +4,7 @@ This project demonstrates how to combine **Flask (backend)**, **SQLite (database
 
 ### Repo Structure
 ```
-flask-file-uploader/
-│
+Flask-Upload-Portal/│
 ├── app.py                  # Main Flask app
 ├── database.db             # Example SQLite DB (with some sample entries)
 ├── uploads/                # Sample uploaded files
@@ -19,16 +18,16 @@ flask-file-uploader/
 ```
 ### Demo Preview
 #### Upload Interface  
-![Upload UI](screenshots/upload-ui.png)
+<img width="2880" height="1698" alt="UploadUI" src="https://github.com/user-attachments/assets/cfa94241-f92a-455d-9234-52dacdae2d1b" />
 
 #### Real-time Progress  
-![Upload Progress](screenshots/upload-progress.png)
+<img width="2880" height="1698" alt="UploadProgress" src="https://github.com/user-attachments/assets/309502b5-5081-49a1-a554-19f74d38fd38" />
 
 #### Upload Success  
-![Upload Success](screenshots/upload-success.png)
+<img width="2880" height="1696" alt="UploadSuccess" src="https://github.com/user-attachments/assets/36ba3c68-8a67-4188-9069-4110a560e567" />
 
 #### Database Logging  
-![Database Records](screenshots/db-view.png)
+<img width="1039" height="473" alt="DatabaseLogging" src="https://github.com/user-attachments/assets/d1aa0324-5788-4d33-adf2-df381044bdce" />
 
 ### Features
 - 📁 **Multi-file & multi-folder uploads**  
@@ -82,5 +81,3 @@ http://127.0.0.1:5000/
 ### Author
 Developed by **Anuvab Munshi**
 🔗 [LinkedIn](www.linkedin.com/in/anuvab-munshi) • [GitHub](github.com/A-Munshi)
-
-```
