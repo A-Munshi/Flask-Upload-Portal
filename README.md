@@ -80,4 +80,3 @@ http://127.0.0.1:5000/
 
 ### Author
 Developed by **Anuvab Munshi**
-🔗 [LinkedIn](www.linkedin.com/in/anuvab-munshi) • [GitHub](github.com/A-Munshi)
