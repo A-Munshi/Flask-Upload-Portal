@@ -30,12 +30,12 @@ Flask-Upload-Portal/│
 <img width="1039" height="473" alt="DatabaseLogging" src="https://github.com/user-attachments/assets/d1aa0324-5788-4d33-adf2-df381044bdce" />
 
 ### Features
-- 📁 **Multi-file & multi-folder uploads**  
-- 📊 **Real-time upload progress bar with animations**  
-- 🗄️ **SQLite database integration** to store upload details  
-- 🎨 **Responsive and modern UI** (HTML, CSS, JavaScript)  
-- 💾 Supports uploads up to **5 GB**  
-- 🛠️ Well-structured code with Flask best practices  
+- **Multi-file & multi-folder uploads**  
+- **Real-time upload progress bar with animations**  
+- **SQLite database integration** to store upload details  
+- **Responsive and modern UI** (HTML, CSS, JavaScript)  
+- Supports uploads up to **5 GB**  
+- Well-structured code with Flask best practices  
 
 ### Tech Stack
 - **Backend:** Python (Flask)  
@@ -72,10 +72,10 @@ http://127.0.0.1:5000/
 ```
 
 ### Future Improvements
-* 🔒 Add user authentication for secure uploads
-* ☁️ Integrate with cloud storage (Azure Blob, AWS S3, or Google Cloud)
-* 📤 Enable file sharing via unique download links
-* 🧾 Admin panel for managing uploads
+* Add user authentication for secure uploads
+* Integrate with cloud storage (Azure Blob, AWS S3, or Google Cloud)
+* Enable file sharing via unique download links
+* Admin panel for managing uploads
 
 
 ### Author
