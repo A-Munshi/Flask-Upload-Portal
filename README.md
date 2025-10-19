@@ -21,7 +21,7 @@ Flask-Upload-Portal/│
 <img width="2880" height="1698" alt="UploadUI" src="https://github.com/user-attachments/assets/cfa94241-f92a-455d-9234-52dacdae2d1b" />
 
 #### Real-time Progress  
-<img width="2880" height="1698" alt="UploadProgress" src="https://github.com/user-attachments/assets/309502b5-5081-49a1-a554-19f74d38fd38" />
+<img width="2879" height="1705" alt="image" src="https://github.com/user-attachments/assets/9c539381-e2e1-4be3-b9a5-43bb4499a30d" />
 
 #### Upload Success  
 <img width="2880" height="1696" alt="UploadSuccess" src="https://github.com/user-attachments/assets/36ba3c68-8a67-4188-9069-4110a560e567" />
