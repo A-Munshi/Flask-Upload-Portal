@@ -164,7 +164,7 @@
       animation: fadeIn 2s forwards;
     }
 
-    /* ✅ Responsive Fix for Phones/Tablets */
+    /* Responsive Fix for Phones/Tablets */
     /* Medium screen responsiveness */
 @media screen and (max-width: 768px) {
   h1 {
@@ -177,64 +177,53 @@
     padding: 20px;
     border-radius: 15px;
   }
-
   .custom-btn,
   .upload-btn {
     width: 90%;
     font-size: 15px;
     padding: 12px;
   }
-
   .file-label {
     font-size: 13px;
   }
-
   .upload-complete {
     font-size: 16px;
   }
-
   .progress-bar {
     font-size: 11px;
   }
 }
 
-/* 💡 Smaller phones (iPhone SE, older Androids) */
+/* Smaller phones */
 @media screen and (max-width: 480px) {
   h1 {
     font-size: 22px;
     margin-top: 20px;
   }
-
   .container {
     width: 75%;
     padding: 16px;
   }
-
   .custom-btn,
   .upload-btn {
     width: 80%;
     font-size: 14px;
     padding: 10px;
   }
-
   .file-label {
     font-size: 12px;
   }
-
   .upload-complete {
     font-size: 14px;
   }
-
   .progress-bar {
     font-size: 10px;
   }
 }
-
   </style>
 </head>
 <body>
   <h1>Welcome to Munshi's DB</h1>
-
   <div class="container">
     <div class="upload-section">
       <label class="custom-btn">
@@ -259,21 +248,18 @@
     const progressSection = document.getElementById('progress-section');
     const uploadComplete = document.getElementById('upload-complete');
     let selectedFiles = [];
-
     fileInput.addEventListener('change', () => {
       for (const file of fileInput.files) {
         selectedFiles.push(file);
       }
       displaySelected();
     });
-
     folderInput.addEventListener('change', () => {
       for (const file of folderInput.files) {
         selectedFiles.push(file);
       }
       displaySelected();
     });
-
     function displaySelected() {
       let html = '';
       const folders = new Set();
@@ -287,14 +273,11 @@
       folders.forEach(f => html += `<div>📁 ${f}</div>`);
       selectedList.innerHTML = html;
     }
-
     function uploadFiles() {
       const formData = new FormData();
       selectedFiles.forEach(file => formData.append('files[]', file));
-
       progressSection.innerHTML = '';
       uploadComplete.style.opacity = 0;
-
       selectedFiles.forEach(file => {
         const wrapper = document.createElement('div');
         wrapper.className = 'progress-wrapper';
@@ -307,7 +290,6 @@
         progressSection.appendChild(label);
         progressSection.appendChild(wrapper);
       });
-
       const xhr = new XMLHttpRequest();
       xhr.open('POST', '/upload', true);
       xhr.upload.onprogress = function(e) {
@@ -335,647 +317,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Munshi's DB</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: 'Segoe UI', sans-serif;
-      overflow-x: hidden;
-      color: #fff;
-      background: radial-gradient(circle at 20% 30%, #3a0ca3, #4361ee, #4cc9f0);
-      background-size: 200% 200%;
-      animation: backgroundMove 15s ease infinite;
-    }
-
-    @keyframes backgroundMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    h1 {
-      text-align: center;
-      font-size: 38px;
-      margin-top: 40px;
-      font-weight: bold;
-    }
-
-    .container {
-      max-width: 700px;
-      margin: 40px auto;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 30px 40px;
-      border-radius: 20px;
-      box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
-      animation: floatUp 1.5s ease-out forwards;
-      transform: translateY(100vh);
-      opacity: 0;
-    }
-
-    @keyframes floatUp {
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    .upload-section {
-      text-align: center;
-    }
-
-    .custom-btn {
-      display: block;
-      width: 50%;
-      margin: 15px auto;
-      padding: 14px;
-      border-radius: 12px;
-      font-weight: bold;
-      color: #fff;
-      background-color: transparent;
-      border: 2px dashed #fff;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .custom-btn:hover {
-      background-color: rgba(255, 255, 255, 0.2);
-      border-color: #ffffff;
-      box-shadow: 0 0 10px #ffffff;
-    }
-
-    input[type="file"] {
-      display: none;
-    }
-
-    .upload-btn {
-      display: block;
-      width: 55%;
-      margin: 25px auto 0;
-      padding: 14px;
-      border-radius: 12px;
-      font-size: 16px;
-      background-color: #ff5e5e;
-      border: none;
-      color: black;
-      font-family: 'Segoe UI', sans-serif;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .upload-btn:hover {
-      background-color: #ff3e33;
-      box-shadow: 0 0 10px #ff5e5e;
-    }
-
-    .progress-container {
-      margin-top: 20px;
-    }
-
-    .progress-bar {
-      background-color: #4caf50;
-      height: 20px;
-      border-radius: 5px;
-      width: 0;
-      transition: width 0.3s;
-      color: black;
-      font-size: 13px;
-      text-align: right;
-      padding-right: 5px;
-    }
-
-    .progress-wrapper {
-      background-color: #ddd;
-      border-radius: 5px;
-      overflow: hidden;
-      margin: 10px 0;
-    }
-
-    .file-label {
-      color: #fff;
-      font-weight: 500;
-      font-size: 15px;
-      margin-top: 5px;
-    }
-
-    .upload-complete {
-      text-align: center;
-      font-size: 20px;
-      font-weight: bold;
-      color: #00ff66;
-      margin-top: 30px;
-      opacity: 0;
-      transition: opacity 1s ease-in;
-    }
-
-    .fade-out {
-      animation: fadeOut 2s forwards;
-    }
-
-    @keyframes fadeOut {
-      to {
-        opacity: 0;
-        height: 0;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-      }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .fade-in {
-      animation: fadeIn 2s forwards;
-    }
-
-    /* Optional: Make page responsive */
-    @media screen and (max-width: 768px) {
-      .custom-btn, .upload-btn {
-        width: 80%;
-      }
-
-      .container {
-        margin: 20px 10px;
-        padding: 20px;
-      }
-
-      h1 {
-        font-size: 30px;
-      }
-    }
-  </style>
-</head>
-<body>
-  <h1>Welcome to Munshi's DB</h1>
-
-  <div class="container">
-    <div class="upload-section">
-      <label class="custom-btn">
-        📁 Choose Files
-        <input type="file" id="file-input" multiple>
-      </label>
-      <label class="custom-btn">
-        📂 Choose Folder
-        <input type="file" id="folder-input" webkitdirectory directory>
-      </label>
-      <div id="selected-list" style="color: #ddd; font-size: 13px; margin-top: 10px;"></div>
-      <button class="upload-btn" onclick="uploadFiles()">⬆️ Upload Files/Folders</button>
-      <div id="progress-section" class="progress-container"></div>
-      <div id="upload-complete" class="upload-complete">✅ Upload complete!</div>
-    </div>
-  </div>
-
-  <script>
-    const fileInput = document.getElementById('file-input');
-    const folderInput = document.getElementById('folder-input');
-    const selectedList = document.getElementById('selected-list');
-    const progressSection = document.getElementById('progress-section');
-    const uploadComplete = document.getElementById('upload-complete');
-    let selectedFiles = [];
-
-    fileInput.addEventListener('change', () => {
-      for (const file of fileInput.files) {
-        selectedFiles.push(file);
-      }
-      displaySelected();
-    });
-
-    folderInput.addEventListener('change', () => {
-      for (const file of folderInput.files) {
-        selectedFiles.push(file);
-      }
-      displaySelected();
-    });
-
-    function displaySelected() {
-      let html = '';
-      const folders = new Set();
-      selectedFiles.forEach(f => {
-        if (f.webkitRelativePath) {
-          folders.add(f.webkitRelativePath.split('/')[0]);
-        } else {
-          html += `<div>${f.name}</div>`;
-        }
-      });
-      folders.forEach(f => html += `<div>📁 ${f}</div>`);
-      selectedList.innerHTML = html;
-    }
-
-    function uploadFiles() {
-      const formData = new FormData();
-      selectedFiles.forEach(file => formData.append('files[]', file));
-
-      progressSection.innerHTML = '';
-      uploadComplete.style.opacity = 0;
-
-      selectedFiles.forEach(file => {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'progress-wrapper';
-        const label = document.createElement('div');
-        label.className = 'file-label';
-        label.textContent = file.webkitRelativePath ? file.webkitRelativePath.split('/')[0] : file.name;
-        const bar = document.createElement('div');
-        bar.className = 'progress-bar';
-        wrapper.appendChild(bar);
-        progressSection.appendChild(label);
-        progressSection.appendChild(wrapper);
-      });
-
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', '/upload', true);
-      xhr.upload.onprogress = function(e) {
-        if (e.lengthComputable) {
-          const percent = Math.round((e.loaded / e.total) * 100);
-          const bars = document.querySelectorAll('.progress-bar');
-          bars.forEach(bar => {
-            bar.style.width = percent + '%';
-            bar.textContent = percent + '%';
-          });
-        }
-      };
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          document.querySelectorAll('.progress-wrapper').forEach(el => el.classList.add('fade-out'));
-          document.querySelectorAll('.file-label').forEach(el => el.classList.add('fade-out'));
-          setTimeout(() => {
-            progressSection.innerHTML = '';
-            uploadComplete.classList.add('fade-in');
-          }, 2000);
-        }
-      };
-      xhr.send(formData);
-    }
-  </script>
-</body>
-</html> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Munshi's DB</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: 'Segoe UI', sans-serif;
-      overflow-x: hidden;
-      color: #fff;
-      background: linear-gradient(-45deg,
-        violet,
-        indigo,
-        blue,
-        green,
-        yellow,
-        orange,
-        red
-      );
-      background-size: 600% 600%;
-      animation: rainbowFlow 20s ease infinite;
-    }
-
-    @keyframes rainbowFlow {
-      0% { background-position: 0% 50%; }
-      25% { background-position: 50% 100%; }
-      50% { background-position: 100% 50%; }
-      75% { background-position: 50% 0%; }
-      100% { background-position: 0% 50%; }
-    }
-
-
-    h1 {
-      text-align: center;
-      font-size: 38px;
-      margin-top: 40px;
-      font-weight: bold;
-    }
-
-    .container {
-      max-width: 700px;
-      margin: 40px auto;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 30px 40px;
-      border-radius: 20px;
-      box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
-      animation: floatUp 1.5s ease-out forwards;
-      transform: translateY(100vh);
-      opacity: 0;
-    }
-
-    @keyframes floatUp {
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    .upload-section {
-      text-align: center;
-    }
-
-    .custom-btn {
-      display: block;
-      width: 50%;
-      margin: 15px auto;
-      padding: 14px;
-      border-radius: 12px;
-      font-weight: bold;
-      color: #fff;
-      background-color: transparent;
-      border: 2px dashed #fff;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .custom-btn:hover {
-      background-color: rgba(255, 255, 255, 0.2);
-      border-color: #ffffff;
-      box-shadow: 0 0 10px #ffffff;
-    }
-
-    input[type="file"] {
-      display: none;
-    }
-
-    .upload-btn {
-      display: block;
-      width: 55%;
-      margin: 25px auto 0;
-      padding: 14px;
-      border-radius: 12px;
-      font-size: 16px;
-      background-color: #ff5e5e;
-      border: none;
-      color: black;
-      font-family: 'Segoe UI', sans-serif;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .upload-btn:hover {
-      background-color: #ff3e33;
-      box-shadow: 0 0 10px #ff5e5e;
-    }
-
-    .progress-container {
-      margin-top: 20px;
-    }
-
-    .progress-bar {
-      background-color: #4caf50;
-      height: 20px;
-      border-radius: 5px;
-      width: 0;
-      transition: width 0.3s;
-      color: black;
-      font-size: 13px;
-      text-align: right;
-      padding-right: 5px;
-    }
-
-    .progress-wrapper {
-      background-color: #ddd;
-      border-radius: 5px;
-      overflow: hidden;
-      margin: 10px 0;
-    }
-
-    .file-label {
-      color: #fff;
-      font-weight: 500;
-      font-size: 15px;
-      margin-top: 5px;
-    }
-
-    .upload-complete {
-      text-align: center;
-      font-size: 20px;
-      font-weight: bold;
-      color: #00ff66;
-      margin-top: 30px;
-      opacity: 0;
-      transition: opacity 1s ease-in;
-    }
-
-    .fade-out {
-      animation: fadeOut 2s forwards;
-    }
-
-    @keyframes fadeOut {
-      to {
-        opacity: 0;
-        height: 0;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-      }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .fade-in {
-      animation: fadeIn 2s forwards;
-    }
-
-    /* Optional: Make page responsive */
-    @media screen and (max-width: 768px) {
-      .custom-btn, .upload-btn {
-        width: 80%;
-      }
-
-      .container {
-        margin: 20px 10px;
-        padding: 20px;
-      }
-
-      h1 {
-        font-size: 30px;
-      }
-    }
-  </style>
-</head>
-<body>
-  <h1>Welcome to Munshi's DB</h1>
-
-  <div class="container">
-    <div class="upload-section">
-      <label class="custom-btn">
-        📁 Choose Files
-        <input type="file" id="file-input" multiple>
-      </label>
-      <label class="custom-btn">
-        📂 Choose Folder
-        <input type="file" id="folder-input" webkitdirectory directory>
-      </label>
-      <div id="selected-list" style="color: #ddd; font-size: 13px; margin-top: 10px;"></div>
-      <button class="upload-btn" onclick="uploadFiles()">⬆️ Upload Files/Folders</button>
-      <div id="progress-section" class="progress-container"></div>
-      <div id="upload-complete" class="upload-complete">✅ Upload complete!</div>
-    </div>
-  </div>
-
-  <script>
-    const fileInput = document.getElementById('file-input');
-    const folderInput = document.getElementById('folder-input');
-    const selectedList = document.getElementById('selected-list');
-    const progressSection = document.getElementById('progress-section');
-    const uploadComplete = document.getElementById('upload-complete');
-    let selectedFiles = [];
-
-    fileInput.addEventListener('change', () => {
-      for (const file of fileInput.files) {
-        selectedFiles.push(file);
-      }
-      displaySelected();
-    });
-
-    folderInput.addEventListener('change', () => {
-      for (const file of folderInput.files) {
-        selectedFiles.push(file);
-      }
-      displaySelected();
-    });
-
-    function displaySelected() {
-      let html = '';
-      const folders = new Set();
-      selectedFiles.forEach(f => {
-        if (f.webkitRelativePath) {
-          folders.add(f.webkitRelativePath.split('/')[0]);
-        } else {
-          html += `<div>${f.name}</div>`;
-        }
-      });
-      folders.forEach(f => html += `<div>📁 ${f}</div>`);
-      selectedList.innerHTML = html;
-    }
-
-    function uploadFiles() {
-      const formData = new FormData();
-      selectedFiles.forEach(file => formData.append('files[]', file));
-
-      progressSection.innerHTML = '';
-      uploadComplete.style.opacity = 0;
-
-      selectedFiles.forEach(file => {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'progress-wrapper';
-        const label = document.createElement('div');
-        label.className = 'file-label';
-        label.textContent = file.webkitRelativePath ? file.webkitRelativePath.split('/')[0] : file.name;
-        const bar = document.createElement('div');
-        bar.className = 'progress-bar';
-        wrapper.appendChild(bar);
-        progressSection.appendChild(label);
-        progressSection.appendChild(wrapper);
-      });
-
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', '/upload', true);
-      xhr.upload.onprogress = function(e) {
-        if (e.lengthComputable) {
-          const percent = Math.round((e.loaded / e.total) * 100);
-          const bars = document.querySelectorAll('.progress-bar');
-          bars.forEach(bar => {
-            bar.style.width = percent + '%';
-            bar.textContent = percent + '%';
-          });
-        }
-      };
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          document.querySelectorAll('.progress-wrapper').forEach(el => el.classList.add('fade-out'));
-          document.querySelectorAll('.file-label').forEach(el => el.classList.add('fade-out'));
-          setTimeout(() => {
-            progressSection.innerHTML = '';
-            uploadComplete.classList.add('fade-in');
-          }, 2000);
-        }
-      };
-      xhr.send(formData);
-    }
-  </script>
-</body>
-</html> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
