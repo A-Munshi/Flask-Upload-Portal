@@ -164,7 +164,7 @@
       animation: fadeIn 2s forwards;
     }
 
-    /* Responsive Fix for Phones/Tablets */
+    /* ✅ Responsive Fix for Phones/Tablets */
     /* Medium screen responsiveness */
 @media screen and (max-width: 768px) {
   h1 {
@@ -177,53 +177,64 @@
     padding: 20px;
     border-radius: 15px;
   }
+
   .custom-btn,
   .upload-btn {
     width: 90%;
     font-size: 15px;
     padding: 12px;
   }
+
   .file-label {
     font-size: 13px;
   }
+
   .upload-complete {
     font-size: 16px;
   }
+
   .progress-bar {
     font-size: 11px;
   }
 }
 
-/* Smaller phones */
+/* 💡 Smaller phones (iPhone SE, older Androids) */
 @media screen and (max-width: 480px) {
   h1 {
     font-size: 22px;
     margin-top: 20px;
   }
+
   .container {
     width: 75%;
     padding: 16px;
   }
+
   .custom-btn,
   .upload-btn {
     width: 80%;
     font-size: 14px;
     padding: 10px;
   }
+
   .file-label {
     font-size: 12px;
   }
+
   .upload-complete {
     font-size: 14px;
   }
+
   .progress-bar {
     font-size: 10px;
   }
 }
+
   </style>
 </head>
 <body>
   <h1>Welcome to Munshi's DB</h1>
+
   <div class="container">
     <div class="upload-section">
       <label class="custom-btn">
@@ -242,78 +253,148 @@
   </div>
 
   <script>
-    const fileInput = document.getElementById('file-input');
-    const folderInput = document.getElementById('folder-input');
-    const selectedList = document.getElementById('selected-list');
-    const progressSection = document.getElementById('progress-section');
-    const uploadComplete = document.getElementById('upload-complete');
-    let selectedFiles = [];
-    fileInput.addEventListener('change', () => {
-      for (const file of fileInput.files) {
-        selectedFiles.push(file);
-      }
-      displaySelected();
+  const fileInput = document.getElementById('file-input');
+  const folderInput = document.getElementById('folder-input');
+  const selectedList = document.getElementById('selected-list');
+  const progressSection = document.getElementById('progress-section');
+  const uploadComplete = document.getElementById('upload-complete');
+
+  let selectedFiles = [];
+
+  fileInput.addEventListener('change', () => {
+    for (const file of fileInput.files) selectedFiles.push({ file, relPath: file.name });
+    displaySelected();
+  });
+
+  folderInput.addEventListener('change', () => {
+    for (const file of folderInput.files)
+      selectedFiles.push({ file, relPath: file.webkitRelativePath });
+    displaySelected();
+  });
+
+  function displaySelected() {
+    let html = '';
+    const folders = new Set();
+    selectedFiles.forEach(f => {
+      if (f.relPath.includes('/')) folders.add(f.relPath.split('/')[0]);
+      else html += `<div>📄 ${f.relPath}</div>`;
     });
-    folderInput.addEventListener('change', () => {
-      for (const file of folderInput.files) {
-        selectedFiles.push(file);
+    folders.forEach(f => html += `<div>📁 ${f}</div>`);
+    selectedList.innerHTML = html;
+  }
+
+  function uploadFiles() {
+    // Group files
+    const grouped = {};
+    const individual = [];
+    selectedFiles.forEach(({ file, relPath }) => {
+      if (relPath.includes('/')) {
+        const topFolder = relPath.split('/')[0];
+        if (!grouped[topFolder]) grouped[topFolder] = [];
+        grouped[topFolder].push({ file, relPath });
+      } else {
+        individual.push({ file, relPath });
       }
-      displaySelected();
     });
-    function displaySelected() {
-      let html = '';
-      const folders = new Set();
-      selectedFiles.forEach(f => {
-        if (f.webkitRelativePath) {
-          folders.add(f.webkitRelativePath.split('/')[0]);
-        } else {
-          html += `<div>${f.name}</div>`;
-        }
-      });
-      folders.forEach(f => html += `<div>📁 ${f}</div>`);
-      selectedList.innerHTML = html;
-    }
-    function uploadFiles() {
+
+    progressSection.innerHTML = '';
+    uploadComplete.style.opacity = 0;
+
+    // --- Progress bars ---
+    const progressMap = {};
+
+    individual.forEach(f => {
+      const label = document.createElement('div');
+      label.className = 'file-label';
+      label.textContent = f.relPath;
+      const wrapper = document.createElement('div');
+      wrapper.className = 'progress-wrapper';
+      const bar = document.createElement('div');
+      bar.className = 'progress-bar';
+      wrapper.appendChild(bar);
+      progressSection.appendChild(label);
+      progressSection.appendChild(wrapper);
+      progressMap[f.relPath] = bar;
+    });
+
+    Object.keys(grouped).forEach(folder => {
+      const label = document.createElement('div');
+      label.className = 'file-label';
+      label.textContent = `📁 ${folder}`;
+      const wrapper = document.createElement('div');
+      wrapper.className = 'progress-wrapper';
+      const bar = document.createElement('div');
+      bar.className = 'progress-bar';
+      wrapper.appendChild(bar);
+      progressSection.appendChild(label);
+      progressSection.appendChild(wrapper);
+      progressMap[folder] = bar;
+    });
+
+    // --- Upload each group separately ---
+    const allUploads = [];
+
+    // Upload individual files
+    individual.forEach(({ file, relPath }) => {
+      allUploads.push(uploadSingle(file, relPath, progressMap[relPath]));
+    });
+
+    // Upload folder groups
+    Object.entries(grouped).forEach(([folder, files]) => {
+      allUploads.push(uploadFolder(folder, files, progressMap[folder]));
+    });
+
+    Promise.all(allUploads).then(() => {
+      document.querySelectorAll('.progress-wrapper').forEach(el => el.classList.add('fade-out'));
+      document.querySelectorAll('.file-label').forEach(el => el.classList.add('fade-out'));
+      setTimeout(() => {
+        progressSection.innerHTML = '';
+        uploadComplete.classList.add('fade-in');
+      }, 2000);
+    });
+  }
+
+  function uploadSingle(file, relPath, bar) {
+    return new Promise(resolve => {
       const formData = new FormData();
-      selectedFiles.forEach(file => formData.append('files[]', file));
-      progressSection.innerHTML = '';
-      uploadComplete.style.opacity = 0;
-      selectedFiles.forEach(file => {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'progress-wrapper';
-        const label = document.createElement('div');
-        label.className = 'file-label';
-        label.textContent = file.webkitRelativePath ? file.webkitRelativePath.split('/')[0] : file.name;
-        const bar = document.createElement('div');
-        bar.className = 'progress-bar';
-        wrapper.appendChild(bar);
-        progressSection.appendChild(label);
-        progressSection.appendChild(wrapper);
-      });
+      formData.append('file', file);
+      formData.append('relPath', relPath);
       const xhr = new XMLHttpRequest();
       xhr.open('POST', '/upload', true);
-      xhr.upload.onprogress = function(e) {
+      xhr.upload.onprogress = e => {
         if (e.lengthComputable) {
           const percent = Math.round((e.loaded / e.total) * 100);
-          const bars = document.querySelectorAll('.progress-bar');
-          bars.forEach(bar => {
-            bar.style.width = percent + '%';
-            bar.textContent = percent + '%';
-          });
+          bar.style.width = percent + '%';
+          bar.textContent = percent + '%';
         }
       };
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          document.querySelectorAll('.progress-wrapper').forEach(el => el.classList.add('fade-out'));
-          document.querySelectorAll('.file-label').forEach(el => el.classList.add('fade-out'));
-          setTimeout(() => {
-            progressSection.innerHTML = '';
-            uploadComplete.classList.add('fade-in');
-          }, 2000);
-        }
-      };
+      xhr.onload = () => resolve();
       xhr.send(formData);
-    }
+    });
+  }
+
+  function uploadFolder(folderName, files, bar) {
+    return new Promise(resolve => {
+      let uploadedCount = 0;
+      const total = files.length;
+
+      files.forEach(({ file, relPath }) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('relPath', relPath);
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/upload', true);
+        xhr.onload = () => {
+          uploadedCount++;
+          const percent = Math.round((uploadedCount / total) * 100);
+          bar.style.width = percent + '%';
+          bar.textContent = percent + '%';
+          if (uploadedCount === total) resolve();
+        };
+        xhr.send(formData);
+      });
+    });
+  }
   </script>
 </body>
 </html>
