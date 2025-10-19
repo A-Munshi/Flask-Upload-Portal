@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024 * 1024  # 5GB
+app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024 * 1024 # 100GB
 
 # Initialize the SQLite database
 def init_db():
@@ -20,28 +20,26 @@ def init_db():
 
 @app.route('/')
 def index():
-    return render_template('index.html')  # uses index.html from templates folder
+    return render_template('index.html') 
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    files = request.files.getlist('files[]')
-    for file in files:
-        if file and file.filename:
-            # Use secure filename and preserve folder structure if provided
-            rel_path = file.filename
-            if hasattr(file, 'webkitRelativePath') and file.webkitRelativePath:
-                rel_path = file.webkitRelativePath.replace("\\", "/")
-            rel_path = os.path.normpath(rel_path)
+    file = request.files['file']
+    rel_path = request.form.get('relPath', file.filename)
 
-            save_path = os.path.join(app.config['UPLOAD_FOLDER'], rel_path)
-            os.makedirs(os.path.dirname(save_path), exist_ok=True)
-            file.save(save_path)
+    # Normalize and secure
+    rel_path = rel_path.replace("\\", "/")
+    rel_path = os.path.normpath(rel_path)
+    save_path = os.path.join(app.config['UPLOAD_FOLDER'], rel_path)
 
-            # Insert into DB
-            conn = sqlite3.connect('database.db')
-            conn.execute("INSERT INTO files (filename, filepath) VALUES (?, ?)", (rel_path, save_path))
-            conn.commit()
-            conn.close()
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    file.save(save_path)
+
+    # Insert into DB
+    conn = sqlite3.connect('database.db')
+    conn.execute("INSERT INTO files (filename, filepath) VALUES (?, ?)", (rel_path, save_path))
+    conn.commit()
+    conn.close()
 
     return '', 200
 
