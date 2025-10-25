@@ -14,7 +14,7 @@ Flask-Upload-Portal/│
 ├── templates/
 │   └── index.html          # Frontend UI
 │
-├── requirements.txt        # Flask, sqlite3, etc.
+└── requirements.txt        # Flask, sqlite3, etc.
 ```
 ### Demo Preview
 #### Upload Interface  
