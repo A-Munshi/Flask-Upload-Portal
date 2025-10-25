@@ -4,7 +4,7 @@ This project demonstrates how to combine **Flask (backend)**, **SQLite (database
 
 ### Repo Structure
 ```
-Flask-Upload-Portal/│
+Flask-Upload-Portal/
 ├── app.py                  # Main Flask app
 ├── database.db             # Example SQLite DB (with some sample entries)
 ├── uploads/                # Sample uploaded files
