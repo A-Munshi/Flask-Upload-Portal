@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024 * 1024 # 100GB
+app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024 * 1024 # 5GB
 
 # Initialize the SQLite database
 def init_db():
@@ -48,3 +48,4 @@ if __name__ == '__main__':
         os.makedirs(UPLOAD_FOLDER)
     init_db()
     app.run(host='0.0.0.0', port=5000, debug=True)
+
