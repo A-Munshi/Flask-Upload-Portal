@@ -34,7 +34,7 @@ Flask-Upload-Portal/
 - **Real-time upload progress bar with animations**  
 - **SQLite database integration** to store upload details  
 - **Responsive and modern UI** (HTML, CSS, JavaScript)  
-- Supports uploads up to **5 GB**  
+- Supports uploads up to **16 GB**  
 - Well-structured code with Flask best practices  
 
 ### Tech Stack
